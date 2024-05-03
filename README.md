@@ -1,4 +1,4 @@
-This is a github page for the development of the drills.js sandboxels mod
+This is a github page for the development of the drills.js sandboxels mod.
 
 whilst we make the mod we are not asociated in any way with r74n.
 
