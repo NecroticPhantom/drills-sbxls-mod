@@ -1,12 +1,11 @@
-/* Made by: Necrotic_Phantom
+/* Made by: NecroticPhantom
    With help from: voidapex11 */
 
 // For change log: "+" = addition, "-" = removal and "~" = change. L, R, U, D corresponds to LEFT, RIGHT, UP and DOWN
-// "committed" means posted current version on github. It is a courtesy and important, especially if you're working on another person's mod at the same time as them, so you don't disrupt each other's work
 
 /*
 ===CHANGE LOG===
-	Version: 1.0.0
+	Version: 1.0.0 (Drills.js)
 @Necrotic_Phantom & @voidapex11
 + steel drill L, R, U & D
 + steel drill missile L, R, U & D
@@ -15,20 +14,26 @@
 + void drill L, R, U & D
 + void drill missile L, R, U & D
 + drills.js info (drills_info) element to 'mods' category
-~ changed all element colors from gray to individual colors
-~ fixed steel/diamond/void drill missile L, R, U & D drilling errors
 ~ fixed steel/diamond/void drill R & steel/diamond/void drill missile R crashing upon border collision
 ~ made steel/diamond/void drill missile L, R, U & D explode upon border contact
-~ committed
 
-	Version: 1.1.0
-*/
-
-/* Future Plans (in approx order):
-~ find error/fix all types of drill_RIGHT crashing game a few seconds after hitting border
+	Version: 1.1.0 (Reverse Update) (WIP: all reverse drills not working/moving)
+@NecroticPhantom
 + reverse steel drill L, R, U & D
 + reverse diamond drill L, R, U & D
 + reverse void drill L, R, U & D
+
+	Version: 1.1.1
+@NecroticPhantom
+~ fixed steel/diamond/void drill L, R, U & D + steel/diamond/void drill missile L, R, U & D not breaking pixels with no listed hardness
+~ committed
+
+	Version: 1.1.2 (WIP)
+@NecroticPhantom
+~ fixed steel/diamond/void drill missile L, R, U & D sometimes creating infinite loops
+
+	Version: 1.2.0 (Random Update) (WIP)
+	@NecroticPhantom
 + random steel drill
 + random steel drill missile
 + random reverse steel drill
@@ -38,15 +43,21 @@
 + random void drill
 + random void drill missile
 + random reverse void drill
-+ programmable steel drill
-+ programmable steel drill missile
-+ programmable reverse steel drill
-+ programmable diamond drill
-+ programmable diamond drill missile
-+ programmable reverse diamond drill
-+ programmable void drill
-+ programmable void drill missile
-+ programmable reverse void drill
+
+	Version: 1.3.0 (Remote Control Update) (WIP)
+@NecroticPhantom
++ guided steel drill
++ guided steel drill missile
++ guided reverse steel drill
++ guided diamond drill
++ guided diamond drill missile
++ guided reverse diamond drill
++ guided void drill
++ guided void drill missile
++ guided reverse void drill
+
+	Version: 1.4.0 (Pathfinding Update) (WIP)
+@NecroticPhantom
 + seeking steel drill
 + seeking steel drill missile
 + seeking reverse steel drill
@@ -56,7 +67,45 @@
 + seeking void drill
 + seeking void drill missile
 + seeking reverse void drill
-+ ricochet drills??? */
++ drill beacon???
++ custom seeking drill???
+
+	Version: 1.5.0 (Ricochet Update???) (WIP)
+@NecroticPhantom
++ ricochet drills???
+
+	Version: 2.0.0 (Electric Update) (WIP: should be easy af, just copy-paste every drill made so far and add a bit of code like the drill missile primed function that prevents it from starting until it has been charged)
+@NecroticPhantom
++ E-steel drill L, R, U & D
++ E-steel drill missile L, R, U & D
++ E-diamond drill L, R, U & D
++ E-diamond drill missile L, R, U & D
++ E-void drill L, R, U & D
++ E-void drill missile L, R, U & D
++ E-reverse steel drill L, R, U & D
++ E-reverse diamond drill L, R, U & D
++ E-reverse void drill L, R, U & D
++ E-random steel drill
++ E-random steel drill missile
++ E-random reverse steel drill
++ E-random diamond drill
++ E-random diamond drill missile
++ E-random reverse diamond drill
++ E-random void drill
++ E-random void drill missile
++ E-random reverse void drill
++ E-guided steel drill
++ E-guided steel drill missile
++ E-guided reverse steel drill
++ E-guided diamond drill
++ E-guided diamond drill missile
++ E-guided reverse diamond drill
++ E-guided void drill
++ E-guided void drill missile
++ E-guided reverse void drill
+*/
+
+
 
 drills_mod_desc_Colour = "#000000"
 steel_drill_Colour = "#71797e"
@@ -65,6 +114,17 @@ diamond_drill_Colour = "#03fcec"
 diamond_drill_missile_Colour = ["#03fcec", "#ff0000"];
 void_drill_Colour = "#262626"
 void_drill_missile_Colour = ["#262626", "#ff0000"];
+reverse_steel_drill_Colour = ["#ffffff", "#71797e"];
+reverse_diamond_drill_Colour = ["#ffffff", "#03fcec"];
+reverse_void_drill_Colour = ["#ffffff", "#262626"];
+
+
+
+behaviors.SELFDELETE = [
+	"XX|XX|XX",
+	"XX|DL|XX",
+	"XX|XX|XX",
+];
 
 
 
@@ -93,6 +153,9 @@ steel_drill_function = function(pixel, dif_x, dif_y) {
 			if (elements[pxl.element].hardness <= 0.8) {
 				delete pixelMap[pixel.x+dif_x][pixel.y+dif_y];
 			}
+			else if (elements[pxl.element].hardness == undefined) {
+				delete pixelMap[pixel.x+dif_x][pixel.y+dif_y];
+			};
 		};
 		tryMove(pixel,pixel.x+dif_x,pixel.y+dif_y);
 	};
@@ -176,6 +239,9 @@ steel_drill_missile_function = function(pixel, dif_x, dif_y) {
 			if (elements[pxl.element].hardness <= 0.8) {
 				delete pixelMap[pixel.x+dif_x][pixel.y+dif_y];
 			}
+			else if (elements[pxl.element].hardness == undefined) {
+				delete pixelMap[pixel.x+dif_x][pixel.y+dif_y];
+			};
 		}
 		else if (pixel.primed) {
 			pixel.die--
@@ -269,6 +335,9 @@ diamond_drill_function = function(pixel, dif_x, dif_y) {
 			if (elements[pxl.element].hardness <= 0.99) {
 				delete pixelMap[pixel.x+dif_x][pixel.y+dif_y];
 			}
+			else if (elements[pxl.element].hardness == undefined) {
+				delete pixelMap[pixel.x+dif_x][pixel.y+dif_y];
+			};
 		};
 		tryMove(pixel,pixel.x+dif_x,pixel.y+dif_y);
 	};
@@ -352,6 +421,9 @@ diamond_drill_missile_function = function(pixel, dif_x, dif_y) {
 			if (elements[pxl.element].hardness <= 0.99) {
 				delete pixelMap[pixel.x+dif_x][pixel.y+dif_y];
 			}
+			else if (elements[pxl.element].hardness == undefined) {
+				delete pixelMap[pixel.x+dif_x][pixel.y+dif_y];
+			};
 		}
 		else if (pixel.primed) {
 			pixel.die--
@@ -445,6 +517,9 @@ void_drill_function = function(pixel, dif_x, dif_y) {
 			if (elements[pxl.element].hardness <= 1) {
 				delete pixelMap[pixel.x+dif_x][pixel.y+dif_y];
 			}
+			else if (elements[pxl.element].hardness == undefined) {
+				delete pixelMap[pixel.x+dif_x][pixel.y+dif_y];
+			};
 		};
 		tryMove(pixel,pixel.x+dif_x,pixel.y+dif_y);
 	};
@@ -528,6 +603,9 @@ void_drill_missile_function = function(pixel, dif_x, dif_y) {
 			if (elements[pxl.element].hardness <= 1) {
 				delete pixelMap[pixel.x+dif_x][pixel.y+dif_y];
 			}
+			else if (elements[pxl.element].hardness == undefined) {
+				delete pixelMap[pixel.x+dif_x][pixel.y+dif_y];
+			};
 		}
 		else if (pixel.primed) {
 			pixel.die--
@@ -608,4 +686,244 @@ elements.void_drill_missile_DOWN = {
 	conduct: 1,
 	state: "solid",
 	maxSize: 1,
+}
+
+
+
+reverse_steel_drill_function = function(pixel, dif_x, dif_y) { //all reverse void drills not working, although not crashing either
+	dif_x = dif_x+pixel.x
+	dif_y = dif_y+pixel.y
+	if (!outOfBounds(pixel.x+dif_x,pixel.y+dif_y)) {
+		pxl = pixelMap[pixel.x+dif_x][pixel.y+dif_y]
+		if (!isEmpty(pixel.x+dif_x,pixel.y+dif_y)) {
+			if ((elements[pxl.element].hardness <= 0.8)) {
+				delete pixelMap[pixel.x+dif_x][pixel.y+dif_y];
+			}
+			else if (elements[pxl.element].hardness == undefined) {
+				delete pixelMap[pixel.x+dif_x][pixel.y+dif_y];
+			};
+		};
+		tryMove(pixel,pixel.x+dif_x,pixel.y+dif_y);
+		changePixel(pixelMap[pixel.x-dif_x][pixel.y-dif_y],"steel");
+	};
+	doDefaults(pixel);
+}
+
+elements.reverse_steel_drill_LEFT = {
+	color: reverse_steel_drill_Colour,
+	tick: function(pixel) {
+		reverse_steel_drill_function(pixel,pixel.x-1,pixel.y);
+	},
+	category: "Drills",
+	breakInto: ["metal_scrap", "steel", "iron", "tin"],
+	tempHigh: 10000,
+	stateHigh: ["molten_steel", "molten_iron", "molten_tin"],
+	density: 10000,
+	hardness: 0.8,
+	conduct: 1,
+	state: "solid",
+}
+
+elements.reverse_steel_drill_RIGHT = {
+	color: reverse_steel_drill_Colour,
+	tick: function(pixel) {
+		reverse_steel_drill_function(pixel,pixel.x+1,pixel.y);
+	},
+	category: "Drills",
+	breakInto: ["metal_scrap", "steel", "iron", "tin"],
+	tempHigh: 10000,
+	stateHigh: ["molten_steel", "molten_iron", "molten_tin"],
+	density: 10000,
+	hardness: 0.8,
+	conduct: 1,
+	state: "solid",
+}
+
+elements.reverse_steel_drill_UP = {
+	color: reverse_steel_drill_Colour,
+	tick: function(pixel) {
+		reverse_steel_drill_function(pixel,pixel.x,pixel.y-1);
+	},
+	category: "Drills",
+	breakInto: ["metal_scrap", "steel", "iron", "tin"],
+	tempHigh: 10000,
+	stateHigh: ["molten_steel", "molten_iron", "molten_tin"],
+	density: 10000,
+	hardness: 0.8,
+	conduct: 1,
+	state: "solid",
+}
+
+elements.reverse_steel_drill_DOWN = {
+	color: reverse_steel_drill_Colour,
+	tick: function(pixel) {
+		reverse_steel_drill_function(pixel,pixel.x,pixel.y)+1;
+	},
+	category: "Drills",
+	breakInto: ["metal_scrap", "steel", "iron", "tin"],
+	tempHigh: 10000,
+	stateHigh: ["molten_steel", "molten_iron", "molten_tin"],
+	density: 10000,
+	hardness: 0.8,
+	conduct: 1,
+	state: "solid",
+}
+
+
+
+reverse_diamond_drill_function = function(pixel, dif_x, dif_y) { //all reverse void drills not working, although not crashing either
+	dif_x = dif_x+pixel.x
+	dif_y = dif_y+pixel.y
+	if (!outOfBounds(pixel.x+dif_x,pixel.y+dif_y)) {
+		pxl = pixelMap[pixel.x+dif_x][pixel.y+dif_y]
+		if (!isEmpty(pixel.x+dif_x,pixel.y+dif_y)) {
+			if (elements[pxl.element].hardness <= 0.99) {
+				delete pixelMap[pixel.x+dif_x][pixel.y+dif_y];
+			}
+		};
+		tryMove(pixel,pixel.x+dif_x,pixel.y+dif_y);
+		changePixel(pixelMap[pixel.x-dif_x][pixel.y-dif_y],"diamond");
+	};
+	doDefaults(pixel);
+}
+
+elements.reverse_diamond_drill_LEFT = {
+	color: reverse_diamond_drill_Colour,
+	tick: function(pixel) {
+		reverse_diamond_drill_function(pixel,pixel.x-1,pixel.y);
+	},
+	category: "Drills",
+	breakInto: ["metal_scrap", "diamond", "iron", "tin"],
+	tempHigh: 10000,
+	stateHigh: ["molten_aluminum", "carbon_dioxide", "molten_iron", "molten_tin"],
+	density: 10000,
+	hardness: 0.99,
+	conduct: 1,
+	state: "solid",
+}
+
+elements.reverse_diamond_drill_RIGHT = {
+	color: reverse_diamond_drill_Colour,
+	tick: function(pixel) {
+		reverse_diamond_drill_function(pixel,pixel.x+1,pixel.y);
+	},
+	category: "Drills",
+	breakInto: ["metal_scrap", "diamond", "iron", "tin"],
+	tempHigh: 10000,
+	stateHigh: ["molten_aluminum", "carbon_dioxide", "molten_iron", "molten_tin"],
+	density: 10000,
+	hardness: 0.99,
+	conduct: 1,
+	state: "solid",
+}
+
+elements.reverse_diamond_drill_UP = {
+	color: reverse_diamond_drill_Colour,
+	tick: function(pixel) {
+		reverse_diamond_drill_function(pixel,pixel.x,pixel.y-1);
+	},
+	category: "Drills",
+	breakInto: ["metal_scrap", "diamond", "iron", "tin"],
+	tempHigh: 10000,
+	stateHigh: ["molten_aluminum", "carbon_dioxide", "molten_iron", "molten_tin"],
+	density: 10000,
+	hardness: 0.99,
+	conduct: 1,
+	state: "solid",
+}
+
+elements.reverse_diamond_drill_DOWN = {
+	color: reverse_diamond_drill_Colour,
+	tick: function(pixel) {
+		reverse_diamond_drill_function(pixel,pixel.x,pixel.y+1);
+	},
+	category: "Drills",
+	breakInto: ["metal_scrap", "diamond", "iron", "tin"],
+	tempHigh: 10000,
+	stateHigh: ["molten_aluminum", "carbon_dioxide", "molten_iron", "molten_tin"],
+	density: 10000,
+	hardness: 0.99,
+	conduct: 1,
+	state: "solid",
+}
+
+
+
+reverse_void_drill_function = function(pixel, dif_x, dif_y) { //all reverse void drills not working, although not crashing either
+	dif_x = dif_x+pixel.x
+	dif_y = dif_y+pixel.y
+	if (!outOfBounds(pixel.x+dif_x,pixel.y+dif_y)) {
+		pxl = pixelMap[pixel.x+dif_x][pixel.y+dif_y]
+		if (!isEmpty(pixel.x+dif_x,pixel.y+dif_y)) {
+			if (elements[pxl.element].hardness <= 1) {
+				delete pixelMap[pixel.x+dif_x][pixel.y+dif_y];
+			}
+			else if (elements[pxl.element].hardness == undefined) {
+				delete pixelMap[pixel.x+dif_x][pixel.y+dif_y];
+			};
+		};
+		tryMove(pixel,pixel.x+dif_x,pixel.y+dif_y);
+		changePixel(pixelMap[pixel.x-dif_x][pixel.y-dif_y],"void");
+	};
+	doDefaults(pixel);
+}
+
+elements.reverse_void_drill_LEFT = {
+	color: reverse_void_drill_Colour,
+	tick: function(pixel) {
+		reverse_void_drill_function(pixel,pixel.x-1,pixel.y);
+	},
+	category: "Drills",
+	breakInto: ["metal_scrap", "void", "iron", "tin"],
+	tempHigh: 10000,
+	stateHigh: ["molten_aluminum", "void", "molten_iron", "molten_tin"],
+	density: 10000,
+	hardness: 1,
+	conduct: 1,
+	state: "solid",
+}
+
+elements.reverse_void_drill_RIGHT = {
+	color: reverse_void_drill_Colour,
+	tick: function(pixel) {
+		reverse_void_drill_function(pixel,pixel.x+1,pixel.y);
+	},
+	category: "Drills",
+	breakInto: ["metal_scrap", "void", "iron", "tin"],
+	tempHigh: 10000,
+	stateHigh: ["molten_aluminum", "void", "molten_iron", "molten_tin"],
+	density: 10000,
+	hardness: 1,
+	conduct: 1,
+	state: "solid",
+}
+
+elements.reverse_void_drill_UP = {
+	color: reverse_void_drill_Colour,
+	tick: function(pixel) {
+		reverse_void_drill_function(pixel,pixel.x,pixel.y-1);
+	},
+	category: "Drills",
+	breakInto: ["metal_scrap", "void", "iron", "tin"],
+	tempHigh: 10000,
+	stateHigh: ["molten_aluminum", "void", "molten_iron", "molten_tin"],
+	density: 10000,
+	hardness: 1,
+	conduct: 1,
+	state: "solid",
+}
+
+elements.reverse_void_drill_DOWN = {
+	color: reverse_void_drill_Colour,
+	tick: function(pixel) {
+		reverse_void_drill_function(pixel,pixel.x,pixel.y+1);
+	},
+	category: "Drills",
+	breakInto: ["metal_scrap", "void", "iron", "tin"],
+	tempHigh: 10000,
+	stateHigh: ["molten_aluminum", "void", "molten_iron", "molten_tin"],
+	density: 10000,
+	hardness: 1,
+	conduct: 1,
+	state: "solid",
 }
