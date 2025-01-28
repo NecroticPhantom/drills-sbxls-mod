@@ -48,6 +48,15 @@
 + steel phasing drill
 + diamond phasing drill
 + void phasing drill
+
+	Version 2.2.0 (Temperature Drills)
+@NecroticPhantom
++ steel thermal drill
++ diamond thermal drill
++ void thermal drill
++ steel cryo drill
++ diamond cryo drill
++ void cryo drill
 */
 
 
@@ -155,6 +164,21 @@ phasing_drill_function = function(pixel, dif_x, dif_y, current_element, current_
 	};
 	return [held_element, held_color];
 };
+
+
+
+// behaviours
+behaviors.THERMAL_DRILL = [
+	"HT:800|HT:800|HT:800",
+	"HT:800|XX|HT:800",
+	"HT:800|HT:800|HT:800",
+];
+
+behaviors.CRYO_DRILL = [
+	"CO:800|CO:800|CO:800",
+	"CO:800|XX|CO:800",
+	"CO:800|CO:800|CO:800",
+];
 
 
 
@@ -522,6 +546,168 @@ elements.void_phasing_drill = {
 		stored_properties = phasing_drill_function(pixel, pixel.x_direction, pixel.y_direction, pixel.stored_element, pixel.stored_color, pixel.non_phase_elements);
 		pixel.stored_element = stored_properties[0];
 		pixel.stored_color = stored_properties[1];
+	},
+	category: "Drills",
+	breakInto: ["metal_scrap", "void", "iron", "tin"],
+	tempHigh: 1455.5,
+	stateHigh: ["molten_aluminium", "void", "molten_iron", "molten_tin"],
+	density: 7850,
+	hardness: 1,
+	conduct: 0.01,
+	state: "solid",
+	maxSize: 1,
+};
+
+elements.steel_thermal_drill = {
+	color: ["#71797e", "#ff7800"],
+	behavior: behaviors.THERMAL_DRILL,
+	properties: {
+		x_direction: 0,
+		y_direction: 0,
+	},
+	tick: function(pixel) {
+		if (pixel.x_direction == 0 && pixel.y_direction == 0) {
+			pixel.x_direction = Number(prompt("Move left, right or neither (Type: -1, 1 or 0 respectively)? "));
+			if (pixel.x_direction == 0) {
+				pixel.y_direction = Number(prompt("Move up or down (Type: -1 or 1 respectively)? "));
+			};
+		};
+		drill_function(pixel, pixel.x_direction, pixel.y_direction);
+	},
+	category: "Drills",
+	breakInto: ["metal_scrap", "steel", "iron", "tin"],
+	tempHigh: 14555,
+	stateHigh: ["molten_aluminium", "molten_steel", "molten_iron", "molten_tin"],
+	density: 7850,
+	hardness: 0.8,
+	conduct: 0.42,
+	state: "solid",
+	maxSize: 1,
+};
+
+elements.diamond_thermal_drill = {
+	color: ["#03fcec", "#ff7800"],
+	behavior: behaviors.THERMAL_DRILL,
+	properties: {
+		x_direction: 0,
+		y_direction: 0,
+	},
+	tick: function(pixel) {
+		if (pixel.x_direction == 0 && pixel.y_direction == 0) {
+			pixel.x_direction = Number(prompt("Move left, right or neither (Type: -1, 1 or 0 respectively)? "));
+			if (pixel.x_direction == 0) {
+				pixel.y_direction = Number(prompt("Move up or down (Type: -1 or 1 respectively)? "));
+			};
+		};
+		drill_function(pixel, pixel.x_direction, pixel.y_direction);
+	},
+	category: "Drills",
+	breakInto: ["metal_scrap", "diamond", "iron", "tin"],
+	tempHigh: 14555,
+	stateHigh: ["molten_aluminium", "diamond", "molten_iron", "molten_tin"],
+	density: 3515,
+	hardness: 0.99,
+	conduct: 0.01,
+	state: "solid",
+	maxSize: 1,
+};
+
+elements.void_thermal_drill = {
+	color: ["#262626", "#ff7800"],
+	behavior: behaviors.THERMAL_DRILL,
+	properties: {
+		x_direction: 0,
+		y_direction: 0,
+	},
+	tick: function(pixel) {
+		if (pixel.x_direction == 0 && pixel.y_direction == 0) {
+			pixel.x_direction = Number(prompt("Move left, right or neither (Type: -1, 1 or 0 respectively)? "));
+			if (pixel.x_direction == 0) {
+				pixel.y_direction = Number(prompt("Move up or down (Type: -1 or 1 respectively)? "));
+			};
+		};
+		drill_function(pixel, pixel.x_direction, pixel.y_direction);
+	},
+	category: "Drills",
+	breakInto: ["metal_scrap", "void", "iron", "tin"],
+	tempHigh: 14555,
+	stateHigh: ["molten_aluminium", "void", "molten_iron", "molten_tin"],
+	density: 7850,
+	hardness: 1,
+	conduct: 0.01,
+	state: "solid",
+	maxSize: 1,
+};
+
+elements.steel_cryo_drill = {
+	color: ["#71797e", "#00ffff"],
+	behavior: behaviors.CRYO_DRILL,
+	properties: {
+		x_direction: 0,
+		y_direction: 0,
+	},
+	tick: function(pixel) {
+		if (pixel.x_direction == 0 && pixel.y_direction == 0) {
+			pixel.x_direction = Number(prompt("Move left, right or neither (Type: -1, 1 or 0 respectively)? "));
+			if (pixel.x_direction == 0) {
+				pixel.y_direction = Number(prompt("Move up or down (Type: -1 or 1 respectively)? "));
+			};
+		};
+		drill_function(pixel, pixel.x_direction, pixel.y_direction);
+	},
+	category: "Drills",
+	breakInto: ["metal_scrap", "steel", "iron", "tin"],
+	tempHigh: 1455.5,
+	stateHigh: ["molten_aluminium", "molten_steel", "molten_iron", "molten_tin"],
+	density: 7850,
+	hardness: 0.8,
+	conduct: 0.42,
+	state: "solid",
+	maxSize: 1,
+};
+
+elements.diamond_cryo_drill = {
+	color: ["#03fcec", "#00ffff"],
+	behavior: behaviors.CRYO_DRILL,
+	properties: {
+		x_direction: 0,
+		y_direction: 0,
+	},
+	tick: function(pixel) {
+		if (pixel.x_direction == 0 && pixel.y_direction == 0) {
+			pixel.x_direction = Number(prompt("Move left, right or neither (Type: -1, 1 or 0 respectively)? "));
+			if (pixel.x_direction == 0) {
+				pixel.y_direction = Number(prompt("Move up or down (Type: -1 or 1 respectively)? "));
+			};
+		};
+		drill_function(pixel, pixel.x_direction, pixel.y_direction);
+	},
+	category: "Drills",
+	breakInto: ["metal_scrap", "diamond", "iron", "tin"],
+	tempHigh: 1455.5,
+	stateHigh: ["molten_aluminium", "diamond", "molten_iron", "molten_tin"],
+	density: 3515,
+	hardness: 0.99,
+	conduct: 0.01,
+	state: "solid",
+	maxSize: 1,
+};
+
+elements.void_cryo_drill = {
+	color: ["#262626", "#00ffff"],
+	behavior: behaviors.CRYO_DRILL,
+	properties: {
+		x_direction: 0,
+		y_direction: 0,
+	},
+	tick: function(pixel) {
+		if (pixel.x_direction == 0 && pixel.y_direction == 0) {
+			pixel.x_direction = Number(prompt("Move left, right or neither (Type: -1, 1 or 0 respectively)? "));
+			if (pixel.x_direction == 0) {
+				pixel.y_direction = Number(prompt("Move up or down (Type: -1 or 1 respectively)? "));
+			};
+		};
+		drill_function(pixel, pixel.x_direction, pixel.y_direction);
 	},
 	category: "Drills",
 	breakInto: ["metal_scrap", "void", "iron", "tin"],
